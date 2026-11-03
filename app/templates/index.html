@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ app_name }} | Full-Stack DevOps Hub</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-container">
+            <div class="logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">{{ app_name }}</span>
+            </div>
+            <div class="header-badges">
+                <span class="badge badge-success">
+                    <span class="pulse-dot"></span> FastAPI Live
+                </span>
+                <span class="badge badge-version">v{{ app_version }}</span>
+                <a href="/docs" target="_blank" class="btn btn-sm btn-outline">Interactive OpenAPI /docs</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- Hero Banner -->
+            <section class="hero-section">
+                <div class="hero-content">
+                    <h1>FastAPI Full-Stack DevOps Platform</h1>
+                    <p class="hero-subtitle">
+                        High-performance asynchronous REST backend with interactive Swagger docs, responsive UI dashboard, Docker container orchestration, and automated Jenkins CI/CD.
+                    </p>
+                </div>
+                <div class="hero-actions">
+                    <a href="/docs" target="_blank" class="btn btn-primary">Swagger Docs ↗</a>
+                    <a href="/health" target="_blank" class="btn btn-outline">Check /health</a>
+                    <a href="/api/metrics" target="_blank" class="btn btn-outline">Metrics API</a>
+                </div>
+            </section>
+
+            <!-- Metrics Grid -->
+            <section class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-icon">🐳</span>
+                        <span class="metric-title">Runtime Environment</span>
+                    </div>
+                    <div class="metric-value">
+                        {% if stats.is_containerized %}
+                            <span class="text-success">Docker Container</span>
+                        {% else %}
+                            <span class="text-warning">Native Host</span>
+                        {% endif %}
+                    </div>
+                    <div class="metric-footer">Host: {{ stats.hostname }}</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-icon">⏱️</span>
+                        <span class="metric-title">Service Uptime</span>
+                    </div>
+                    <div class="metric-value">{{ stats.uptime_human }}</div>
+                    <div class="metric-footer">UTC: {{ stats.server_time_utc }}</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-icon">🐍</span>
+                        <span class="metric-title">Python Engine</span>
+                    </div>
+                    <div class="metric-value">Python {{ stats.python_version }}</div>
+                    <div class="metric-footer">Arch: {{ stats.architecture }}</div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-icon">📊</span>
+                        <span class="metric-title">Active Items</span>
+                    </div>
+                    <div class="metric-value" id="itemCountDisplay">{{ items | length }} Tasks</div>
+                    <div class="metric-footer">Status: Operational</div>
+                </div>
+            </section>
+
+            <!-- Action & Form Section -->
+            <section class="action-grid">
+                <div class="form-card">
+                    <h2 class="section-title">Create DevOps Milestone</h2>
+                    <form id="createItemForm" class="create-form">
+                        <div class="form-group">
+                            <label for="itemTitle">Task Title</label>
+                            <input type="text" id="itemTitle" required placeholder="e.g. Implement SonarQube Quality Gate">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="itemCategory">Category</label>
+                                <select id="itemCategory">
+                                    <option value="Backend">Backend</option>
+                                    <option value="Frontend">Frontend</option>
+                                    <option value="DevOps" selected>DevOps</option>
+                                    <option value="CI/CD">CI/CD</option>
+                                    <option value="Security">Security</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="itemPriority">Priority</label>
+                                <select id="itemPriority">
+                                    <option value="Low">Low</option>
+                                    <option value="Medium" selected>Medium</option>
+                                    <option value="High">High</option>
+                                    <option value="Critical">Critical</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="itemStatus">Status</label>
+                                <select id="itemStatus">
+                                    <option value="Pending" selected>Pending</option>
+                                    <option value="In Progress">In Progress</option>
+                                    <option value="Completed">Completed</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="itemDesc">Description</label>
+                            <input type="text" id="itemDesc" placeholder="Brief technical details or objectives">
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block" id="submitBtn">+ Add Item to API</button>
+                    </form>
+                </div>
+
+                <!-- Pipeline Lifecycle Diagram -->
+                <div class="flow-card">
+                    <h2 class="section-title">End-to-End Pipeline Automation</h2>
+                    <div class="pipeline-list">
+                        <div class="pipeline-step">
+                            <span class="step-num">1</span>
+                            <div>
+                                <strong>FastAPI Service Architecture</strong>
+                                <p>Asynchronous ASGI application with Pydantic validation</p>
+                            </div>
+                        </div>
+                        <div class="pipeline-step">
+                            <span class="step-num">2</span>
+                            <div>
+                                <strong>Pytest & Code Quality</strong>
+                                <p>Automated test suite with JUnit XML generation</p>
+                            </div>
+                        </div>
+                        <div class="pipeline-step">
+                            <span class="step-num">3</span>
+                            <div>
+                                <strong>Production Docker Image</strong>
+                                <p>Multi-stage build with non-root appuser & curl healthcheck</p>
+                            </div>
+                        </div>
+                        <div class="pipeline-step">
+                            <span class="step-num">4</span>
+                            <div>
+                                <strong>Jenkins CI/CD Automation</strong>
+                                <p>Automated checkout, syntax lint, test, docker build & smoke test</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Items Table Section -->
+            <section class="tasks-section">
+                <div class="section-header-flex">
+                    <h2 class="section-title">DevOps Tasks & REST API Store</h2>
+                    <button class="btn btn-sm btn-outline" onclick="loadItems()">↻ Refresh</button>
+                </div>
+                <div class="tasks-table-wrapper">
+                    <table class="tasks-table" id="itemsTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Timestamp</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="itemsTableBody">
+                            {% for item in items %}
+                            <tr id="row-{{ item.id }}">
+                                <td class="task-id">#{{ item.id }}</td>
+                                <td class="task-title">
+                                    <strong>{{ item.title }}</strong>
+                                    {% if item.description %}
+                                        <div class="item-desc-text">{{ item.description }}</div>
+                                    {% endif %}
+                                </td>
+                                <td><span class="category-pill">{{ item.category }}</span></td>
+                                <td>
+                                    {% if item.priority == 'Critical' %}
+                                        <span class="priority-pill priority-critical">{{ item.priority }}</span>
+                                    {% elif item.priority == 'High' %}
+                                        <span class="priority-pill priority-high">{{ item.priority }}</span>
+                                    {% else %}
+                                        <span class="priority-pill priority-normal">{{ item.priority }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if item.status == 'Completed' %}
+                                        <span class="status-badge status-completed">✓ {{ item.status }}</span>
+                                    {% elif item.status == 'In Progress' %}
+                                        <span class="status-badge status-progress">⚡ {{ item.status }}</span>
+                                    {% else %}
+                                        <span class="status-badge status-pending">⏳ {{ item.status }}</span>
+                                    {% endif %}
+                                </td>
+                                <td class="task-time">{{ item.created_at }}</td>
+                                <td>
+                                    <button class="btn-delete" onclick="deleteItem({{ item.id }})">Delete</button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container footer-container">
+            <p>© 2026 Ganesh DevOps Project 2. Powered by FastAPI, Docker, and Jenkins CI/CD.</p>
+            <p class="footer-links">
+                <a href="https://github.com/Tharun830/ganesh_devops_project_2" target="_blank">GitHub Repository</a>
+                <span>•</span>
+                <a href="/docs" target="_blank">Swagger API</a>
+                <span>•</span>
+                <a href="/health">Health API</a>
+                <span>•</span>
+                <a href="/api/metrics">Metrics API</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
